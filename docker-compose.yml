@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  app:
+    container_name: infura_api
+    build: .
+    ports:
+      - 8080:8080
+    restart: on-failure
+    environment:
+      PORT: 8080
+      PROJECT_ID: '2df95ac72e5a4153b3de94977e4d3783'
+    volumes:
+      - .:/app
