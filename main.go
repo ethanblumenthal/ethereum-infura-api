@@ -9,8 +9,6 @@ import (
 	"github.com/gorilla/handlers"
 )
 
-// 2df95ac72e5a4153b3de94977e4d3783
-// 8080
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -18,7 +16,7 @@ func main() {
 	}
 
 	projectId := os.Getenv("PROJECT_ID")
-	if port == "" {
+	if projectId == "" {
 		log.Fatal("$PROJECT_ID must be set")
 	}
 

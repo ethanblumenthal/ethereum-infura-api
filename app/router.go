@@ -4,10 +4,11 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/INFURA/go-libs/jsonrpc_client"
 	"github.com/gorilla/mux"
 )
 
-var controller = &Controller{Client: Client{}}
+var controller = &Controller{EthereumClient: jsonrpc_client.EthereumClient{URL: "https://mainnet.infura.io/v3/2df95ac72e5a4153b3de94977e4d3783"}}
 
 // Route defines a route
 type Route struct {
@@ -21,30 +22,29 @@ type Route struct {
 type Routes []Route
 
 var routes = Routes {
-    // Route {
-    //     "Authentication",
-    //     "POST",
-    //     "/get-token",
-    //     controller.GetToken,
-    // },
-	// Get Account by {hash}
 	Route {
-		"GetAccount",
+		"GetBlockNumber",
 		"GET",
-		"/accounts/{hash}",
-		controller.GetAccount,
+		"/blocks",
+		controller.GetBlockNumber,
+	},
+	Route {
+		"GetBlockByNumber",
+		"GET",
+		"/blocks/{num}",
+		controller.GetBlockByNumber,
 	},
     Route {
-		"GetBlock",
+		"GetBlockByHash",
 		"GET",
 		"/blocks/{hash}",
-		controller.GetBlock,
+		controller.GetBlockByHash,
 	},
     Route {
-		"GetTransaction",
+		"GetTransactionByHash",
 		"GET",
 		"/transactions/{hash}",
-		controller.GetTransaction,
+		controller.GetTransactionByHash,
 	},
 }
 
@@ -53,7 +53,7 @@ func NewRouter() *mux.Router {
     router := mux.NewRouter().StrictSlash(true)
     for _, route := range routes { 
         var handler http.Handler
-        log.Println(route.Name)
+		log.Println(route.Name)
         handler = route.HandlerFunc
         
         router.
