@@ -4,13 +4,15 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 
+	"github.com/INFURA/go-libs/jsonrpc_client"
 	"github.com/gorilla/mux"
 )
 
 // Controller ...
 type Controller struct {
-    Client Client
+    EthereumClient jsonrpc_client.EthereumClient
 }
 
 type ErrRes struct {
@@ -37,51 +39,55 @@ func (c *Controller) writeRes(w http.ResponseWriter, content interface{}) {
 	w.Write(contentJson)
 }
 
-// GetAccount GET - Gets a single account by hash
-func (c *Controller) GetAccount(w http.ResponseWriter, r *http.Request) {
-    vars := mux.Vars(r)
-    log.Println(vars)
-
-    accountHash := vars["hash"]
-    log.Println(accountHash);
-
-    account, err := c.Client.GetAccountByHash(accountHash)
+// GetBlockNumber GET - Gets the current block number
+func (c *Controller) GetBlockNumber(w http.ResponseWriter, r *http.Request) {
+    blockNum, err := c.EthereumClient.Eth_blockNumber()
 	if err != nil {
-        log.Fatalln("Error GetAccount", err)
+        log.Fatalln("Error GetBlockNumber", err)
     }
 	
-    c.writeRes(w, account)
+    c.writeRes(w, blockNum)
     return
 }
 
-// GetBlock GET - Gets a single block by hash
-func (c *Controller) GetBlock(w http.ResponseWriter, r *http.Request) {
+
+// GetBlockByNumber GET - Gets a single block by number
+func (c *Controller) GetBlockByNumber(w http.ResponseWriter, r *http.Request) {
     vars := mux.Vars(r)
-    log.Println(vars)
+    blockNum := vars["num"]
+    blockInt, err := strconv.Atoi(blockNum)
 
-    blockHash := vars["hash"]
-    log.Println(blockHash);
-
-    block, err := c.Client.GetBlockByHash(blockHash)
+    block, err := c.EthereumClient.Eth_getBlockByNumber(blockInt, true)
 	if err != nil {
-        log.Fatalln("Error GetBlock", err)
+        log.Fatalln("Error GetBlockByNumber", err)
     }
 	
     c.writeRes(w, block)
     return
 }
 
-// GetTransaction GET - Gets a single tx by hash
-func (c *Controller) GetTransaction(w http.ResponseWriter, r *http.Request) {
+// GetBlockByHash GET - Gets a single block by hash
+func (c *Controller) GetBlockByHash(w http.ResponseWriter, r *http.Request) {
     vars := mux.Vars(r)
-    log.Println(vars)
+    blockHash := vars["hash"]
 
-    txHash := vars["hash"]
-    log.Println(txHash);
-
-    tx, err := c.Client.GetTransactionByHash(txHash)
+    block, err := c.EthereumClient.Eth_getBlockByHash(blockHash, true)
 	if err != nil {
-        log.Fatalln("Error GetTransaction", err)
+        log.Fatalln("Error GetBlockByHash", err)
+    }
+	
+    c.writeRes(w, block)
+    return
+}
+
+// GetTransactionByHash GET - Gets a single transaction by hash
+func (c *Controller) GetTransactionByHash(w http.ResponseWriter, r *http.Request) {
+    vars := mux.Vars(r)
+    txHash := vars["hash"]
+
+    tx, err := c.EthereumClient.Eth_getTransactionByHash(txHash)
+	if err != nil {
+        log.Fatalln("Error GetTransactionByHash", err)
     }
 	
     c.writeRes(w, tx)
