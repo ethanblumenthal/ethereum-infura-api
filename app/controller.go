@@ -10,7 +10,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// Controller ...
 type Controller struct {
     EthereumClient jsonrpc_client.EthereumClient
 }
@@ -49,7 +48,6 @@ func (c *Controller) GetBlockNumber(w http.ResponseWriter, r *http.Request) {
     c.writeRes(w, blockNum)
     return
 }
-
 
 // GetBlockByNumber GET - Gets a single block by number
 func (c *Controller) GetBlockByNumber(w http.ResponseWriter, r *http.Request) {

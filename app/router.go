@@ -25,16 +25,16 @@ var routes = Routes {
 	Route {
 		"GetBlockNumber",
 		"GET",
-		"/blocks",
+		"/blocks/number",
 		controller.GetBlockNumber,
 	},
 	Route {
 		"GetBlockByNumber",
 		"GET",
-		"/blocks/{num}",
+		"/blocks/number/{num}",
 		controller.GetBlockByNumber,
 	},
-    Route {
+	Route {
 		"GetBlockByHash",
 		"GET",
 		"/blocks/{hash}",
