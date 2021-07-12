@@ -10,6 +10,9 @@ import (
 )
 
 func main() {
+	os.Setenv("PORT", "8080")
+	os.Setenv("PROJECT_ID", "2df95ac72e5a4153b3de94977e4d3783")
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		log.Fatal("$PORT must be set")
@@ -21,11 +24,11 @@ func main() {
 	}
 
 	// Create routes
-	router := app.NewRouter() 
+	router := app.NewRouter()
 
 	// These two lines are important in order to allow access from the front-end side to the methods
 	allowedOrigins := handlers.AllowedOrigins([]string{"*"}) 
- 	allowedMethods := handlers.AllowedMethods([]string{"GET", "POST", "DELETE", "PUT"})
+ 	allowedMethods := handlers.AllowedMethods([]string{"GET"})
 
 	// Launch server with CORS validations
  	log.Fatal(http.ListenAndServe(":" + port, handlers.CORS(allowedOrigins, allowedMethods)(router)))

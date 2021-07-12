@@ -5,10 +5,13 @@ import (
 	"net/http"
 
 	"github.com/INFURA/go-libs/jsonrpc_client"
+	"github.com/coocood/freecache"
 	"github.com/gorilla/mux"
 )
 
-var controller = &Controller{EthereumClient: jsonrpc_client.EthereumClient{URL: "https://mainnet.infura.io/v3/2df95ac72e5a4153b3de94977e4d3783"}}
+// In bytes, where 1024 * 1024 represents a single Megabyte, and 100 * 1024*1024 represents 100 Megabytes.
+var cacheSize = 100 * 1024 * 1024 * 10000000000
+var handler = &Handler{EthereumClient: jsonrpc_client.EthereumClient{URL: "https://mainnet.infura.io/v3/2df95ac72e5a4153b3de94977e4d3783"}, Cache: freecache.Cache{}}
 
 // Route defines a route
 type Route struct {
@@ -26,29 +29,29 @@ var routes = Routes {
 		"GetBlockNumber",
 		"GET",
 		"/blocks/number",
-		controller.GetBlockNumber,
+		handler.GetBlockNumber,
 	},
 	Route {
 		"GetBlockByNumber",
 		"GET",
 		"/blocks/number/{num}",
-		controller.GetBlockByNumber,
+		handler.GetBlockByNumber,
 	},
 	Route {
 		"GetBlockByHash",
 		"GET",
 		"/blocks/{hash}",
-		controller.GetBlockByHash,
+		handler.GetBlockByHash,
 	},
     Route {
 		"GetTransactionByHash",
 		"GET",
 		"/transactions/{hash}",
-		controller.GetTransactionByHash,
+		handler.GetTransactionByHash,
 	},
 }
 
-// NewRouter configures a new router to the API
+// NewRouter configures a new router for the API
 func NewRouter() *mux.Router {
     router := mux.NewRouter().StrictSlash(true)
     for _, route := range routes { 
