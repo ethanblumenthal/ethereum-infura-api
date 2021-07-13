@@ -6,14 +6,14 @@ This app exposes Ethereum Mainnet account, transaction, and block data from the 
 
 ```
 infra-test-ethan-blumenthal
-    |- app/               - Contains main API logic files
-        |- controller.go  - Defines handler methods of endpoints
-        |- models.go      - Block and Transaction models
-        |- client.go      - Methods interacting with JSON-RPC API
-        |- router.go      - Defines routes and endpoints
-    |- Dockerfile         - Dockerfile for Docker container
-    |- README.md          - Readme file for documentation
-    |- main.go            - Entry point of the API
+    |- app/                     - Contains main API logic files
+        |- handler.go           - Defines handler methods of endpoints
+        |- router.go            - Defines routes and endpoints
+        |- benchmark_test.go    - Defines server load tests
+    |- Dockerfile               - Dockerfile for Docker container
+    |- docker-compose.yml       - Defines multi-container environment
+    |- README.md                - Readme file for documentation
+    |- main.go                  - Entry point of the API
 ```
 
 ## Instructions
@@ -38,9 +38,15 @@ go get -u github.com/INFURA/infra-test-ethan-blumenthal
 go install ./...
 ```
 
-## Using Docker
+#### Running locally
 
-Lastly, run docker-compose up and Compose will start and run your entire app.
+Make sure to set `PROJECT_ID` and `PORT` as environment variables.
+
+```
+go run main.go
+```
+
+#### Running with Docker
 
 ```
 docker-compose up -d
@@ -48,12 +54,15 @@ docker-compose up -d
 
 ## Performance
 
-Run some load test iterations and document the testing approach and the results obtained. Specify some performance expectations given the load test results: e.g., this application is able to support X requests per minute.
-
-## Testing
-
-Run all tests with verbosity but one at a time, without timeout, to avoid ports collisions:
+Run benchmark tests on the server at various loads.
 
 ```
-go test -v -p=1 -timeout=0 ./...
+GOMAXPROCS=1 go test -bench=NetHTTPServerGet -benchmem -benchtime=10s
+```
+
+## TO DO
+
+```
+    |- Complete setup of testing server
+    |- Complete cache integration
 ```
