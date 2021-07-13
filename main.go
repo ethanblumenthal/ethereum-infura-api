@@ -10,9 +10,6 @@ import (
 )
 
 func main() {
-	os.Setenv("PORT", "8080")
-	os.Setenv("PROJECT_ID", "2df95ac72e5a4153b3de94977e4d3783")
-
 	port := os.Getenv("PORT")
 	if port == "" {
 		log.Fatal("$PORT must be set")

@@ -21,6 +21,7 @@ type ErrRes struct {
 	Error string `json:"error"`
 }
 
+// writeErrRes - Heper function to construct a HTTP error response
 func (h *Handler) writeErrRes(w http.ResponseWriter, err error) {
 	jsonErrRes, _ := json.Marshal(ErrRes{err.Error()})
 	w.Header().Set("Content-Type", "application/json")
@@ -28,6 +29,7 @@ func (h *Handler) writeErrRes(w http.ResponseWriter, err error) {
 	w.Write(jsonErrRes)
 }
 
+// writeRes - Heper function to construct a HTTP response
 func (h *Handler) writeRes(w http.ResponseWriter, contentJson []byte) {
     w.Header().Set("Content-Type", "application/json; charset=UTF-8")
     w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -35,6 +37,7 @@ func (h *Handler) writeRes(w http.ResponseWriter, contentJson []byte) {
 	w.Write(contentJson)
 }
 
+// setCache - Helper function to get a cache value at key
 func (h *Handler) setCache(key []byte, val []byte) {
     expire := 600 // expire in 600 seconds (10 min)
     err := h.Cache.Set(key, val, expire)
@@ -43,6 +46,7 @@ func (h *Handler) setCache(key []byte, val []byte) {
     }
 }
 
+// getCache - Helper function to get a cache value given key
 func (h *Handler) getCache(key []byte) (val []byte, err error) {
     val, err = h.Cache.Get(key)
     if err != nil {

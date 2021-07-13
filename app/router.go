@@ -11,7 +11,7 @@ import (
 
 // In bytes, where 1024 * 1024 represents a single Megabyte, and 100 * 1024*1024 represents 100 Megabytes.
 var cacheSize = 100 * 1024 * 1024 * 10000000000
-var handler = &Handler{EthereumClient: jsonrpc_client.EthereumClient{URL: "https://mainnet.infura.io/v3/2df95ac72e5a4153b3de94977e4d3783"}, Cache: freecache.Cache{}}
+var handler = &Handler{EthereumClient: jsonrpc_client.EthereumClient{URL: "https://mainnet.infura.io/v3/"}, Cache: freecache.Cache{}}
 
 // Route defines a route
 type Route struct {
