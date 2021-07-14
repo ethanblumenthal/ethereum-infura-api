@@ -9,6 +9,6 @@ services:
     restart: on-failure
     environment:
       PORT: 8080
-      PROJECT_ID: '2df95ac72e5a4153b3de94977e4d3783'
+      PROJECT_ID: 'xxx'
     volumes:
       - .:/app
